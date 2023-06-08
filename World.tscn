@@ -1,4 +1,4 @@
-[gd_scene load_steps=364 format=3 uid="uid://cqpeil8i11iep"]
+[gd_scene load_steps=360 format=3 uid="uid://cqpeil8i11iep"]
 
 [ext_resource type="Resource" uid="uid://7h57nuq1xmoi" path="res://addons/qodot/game_definitions/fgd/qodot_fgd.tres" id="1"]
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_map.gd" id="2"]
@@ -30,7 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://glhl3b0wg7cv" path="res://textures/Pain/Asphalt2.png" id="28"]
 [ext_resource type="Texture2D" uid="uid://bkrc0g6b0kl0f" path="res://textures/Pain/Stone3.png" id="29"]
 [ext_resource type="Script" path="res://addons/qodot/src/nodes/qodot_entity.gd" id="30"]
-[ext_resource type="Script" path="res://Player.cs" id="31_u1eom"]
+[ext_resource type="PackedScene" uid="uid://bs0v7svodkuh3" path="res://Character/CharacterBody.tscn" id="31_b43fm"]
 
 [sub_resource type="StandardMaterial3D" id="1"]
 texture_filter = 4
@@ -1351,19 +1351,6 @@ points = PackedVector3Array(-149, 15, -35, -149, 13, -35, -74, 13, -35, -74, 15,
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_kj8pm"]
 points = PackedVector3Array(-74, 15, -35, -74, 13, -35, -73, 13, -35, -73, 15, -35, -74, 15, -34, -74, 13, -34, -73, 13, -34, -73, 15, -34)
 
-[sub_resource type="CapsuleShape3D" id="329"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt76u"]
-
-[sub_resource type="Sky" id="Sky_wa1jv"]
-sky_material = SubResource("ProceduralSkyMaterial_gt76u")
-
-[sub_resource type="Environment" id="Environment_mcioc"]
-background_mode = 2
-background_color = Color(0.54902, 0.713726, 0.74902, 1)
-sky = SubResource("Sky_wa1jv")
-ambient_light_color = Color(0.921569, 0.952941, 0.968627, 1)
-
 [node name="World" type="Node3D"]
 
 [node name="QodotMap" type="Node3D" parent="."]
@@ -2323,30 +2310,7 @@ properties = {
 "origin": "-408 248 136"
 }
 
-[node name="Rigidbody" type="RigidBody3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 17.2783, 8.37321, -20.1343)
-axis_lock_angular_x = true
-axis_lock_angular_z = true
-continuous_cd = true
-can_sleep = false
-script = ExtResource("31_u1eom")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rigidbody"]
-shape = SubResource("329")
-
-[node name="Camera3D" type="Camera3D" parent="Rigidbody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.548092, 0)
-environment = SubResource("Environment_mcioc")
-current = true
-
-[node name="LegCast" type="RayCast3D" parent="Rigidbody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-target_position = Vector3(0, -4, 0)
-debug_shape_thickness = 5
-
-[node name="HeadCast" type="RayCast3D" parent="Rigidbody"]
-target_position = Vector3(0, 4, 0)
-debug_shape_thickness = 5
+[node name="Rigidbody" parent="." instance=ExtResource("31_b43fm")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.874476, 0.288789, -0.389735, 0, 0.803462, 0.595356, 0.485069, 0.520624, -0.702608, 6.45941, 39.2642, -31.6533)
