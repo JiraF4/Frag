@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3 uid="uid://bs0v7svodkuh3"]
+
+[ext_resource type="Script" path="res://Player.cs" id="1_0bbt5"]
+[ext_resource type="ArrayMesh" uid="uid://b4rmkr0ksc7l7" path="res://Goblin/GoblinBody.vox" id="2_enus5"]
+[ext_resource type="ArrayMesh" uid="uid://4q2gx3srodwn" path="res://Goblin/GoblinHead.vox" id="3_nfln2"]
+[ext_resource type="ArrayMesh" uid="uid://b5nq2bacmde5g" path="res://Goblin/GoblinLL.vox" id="4_3jbvq"]
+[ext_resource type="ArrayMesh" uid="uid://csy3x5wp18lgt" path="res://Goblin/GoblinLR.vox" id="5_r5w3c"]
+
+[sub_resource type="CapsuleShape3D" id="329"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt76u"]
+
+[sub_resource type="Sky" id="Sky_wa1jv"]
+sky_material = SubResource("ProceduralSkyMaterial_gt76u")
+
+[sub_resource type="Environment" id="Environment_mcioc"]
+background_mode = 2
+background_color = Color(0.54902, 0.713726, 0.74902, 1)
+sky = SubResource("Sky_wa1jv")
+ambient_light_color = Color(0.921569, 0.952941, 0.968627, 1)
+
+[node name="Rigidbody" type="RigidBody3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+continuous_cd = true
+can_sleep = false
+script = ExtResource("1_0bbt5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("329")
+
+[node name="LegCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+target_position = Vector3(0, -4, 0)
+debug_shape_thickness = 5
+
+[node name="HeadCast" type="RayCast3D" parent="."]
+target_position = Vector3(0, 4, 0)
+debug_shape_thickness = 5
+
+[node name="GoblinLl" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.5, -4, 0)
+visible = false
+mesh = ExtResource("4_3jbvq")
+
+[node name="GoblinLr" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.5, -4, 0)
+visible = false
+mesh = ExtResource("5_r5w3c")
+
+[node name="Body" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+environment = SubResource("Environment_mcioc")
+current = true
+
+[node name="GoblinHead" type="MeshInstance3D" parent="Body/Camera3D"]
+transform = Transform3D(-0.5, 0, -4.37114e-08, 0, 0.5, 0, 4.37114e-08, 0, -0.5, 0, -0.548092, 0)
+visible = false
+mesh = ExtResource("3_nfln2")
+skeleton = NodePath("../../..")
+
+[node name="GoblinBody" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.7, 0)
+mesh = ExtResource("2_enus5")
+skeleton = NodePath("../..")
