@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bs0v7svodkuh3"]
+[gd_scene load_steps=24 format=3 uid="uid://bs0v7svodkuh3"]
 
 [ext_resource type="Script" path="res://Character.cs" id="1_fmeea"]
 [ext_resource type="ArrayMesh" uid="uid://b4rmkr0ksc7l7" path="res://Goblin/GoblinBody.vox" id="2_enus5"]
@@ -11,6 +11,9 @@
 [ext_resource type="ArrayMesh" uid="uid://c6pugp28tq0jv" path="res://Goblin/GoblinAL.vox" id="8_1ccr3"]
 [ext_resource type="Texture2D" uid="uid://4v4d2e4kower" path="res://Particles/Smoke.png" id="10_2i7im"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_weu6y"]
+friction = 0.1
+
 [sub_resource type="CapsuleShape3D" id="329"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gt76u"]
@@ -22,7 +25,17 @@ sky_material = SubResource("ProceduralSkyMaterial_gt76u")
 background_mode = 2
 background_color = Color(0.54902, 0.713726, 0.74902, 1)
 sky = SubResource("Sky_wa1jv")
-ambient_light_color = Color(0.921569, 0.952941, 0.968627, 1)
+ambient_light_color = Color(0.207843, 0.321569, 0.372549, 1)
+reflected_light_source = 2
+ssao_enabled = true
+ssao_intensity = 5.0
+sdfgi_use_occlusion = true
+sdfgi_read_sky_light = false
+sdfgi_cascades = 8
+sdfgi_max_distance = 3276.8
+fog_light_color = Color(0, 0, 0, 1)
+fog_sun_scatter = 0.01
+fog_height_density = 1.0
 
 [sub_resource type="Gradient" id="Gradient_yjpyh"]
 offsets = PackedFloat32Array(0, 0.154195, 1)
@@ -81,6 +94,7 @@ size = Vector3(0.01, 0.01, 50)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 axis_lock_angular_x = true
 axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_weu6y")
 continuous_cd = true
 can_sleep = false
 script = ExtResource("1_fmeea")
@@ -88,6 +102,7 @@ script = ExtResource("1_fmeea")
 [node name="RightFootCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0.5, -1, 0)
 target_position = Vector3(0, -4, 0)
+hit_from_inside = true
 
 [node name="RightFoot" type="Node3D" parent="RightFootCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
@@ -100,6 +115,7 @@ skeleton = NodePath("../..")
 [node name="LeftFootCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -1, 0)
 target_position = Vector3(0, -4, 0)
+hit_from_inside = true
 
 [node name="LeftFoot" type="Node3D" parent="LeftFootCast"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
@@ -115,17 +131,19 @@ shape = SubResource("329")
 [node name="LegCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 target_position = Vector3(0, -4, 0)
+hit_from_inside = true
 debug_shape_thickness = 5
 
 [node name="HeadCast" type="RayCast3D" parent="."]
 target_position = Vector3(0, 4, 0)
+hit_from_inside = true
 debug_shape_thickness = 5
 
 [node name="Body" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.032, 2, -0.247)
 environment = SubResource("Environment_mcioc")
 current = true
 
@@ -187,3 +205,9 @@ mesh = SubResource("BoxMesh_8fqtd")
 
 [node name="WeaponTarget" type="Node3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.263677, 1.06727, -1.32971)
+
+[node name="NavigationPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="NavigationPoint"]
+avoidance_enabled = true

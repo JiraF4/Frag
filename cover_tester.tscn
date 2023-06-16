@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw4x3m5bijvsk"]
+
+[ext_resource type="Script" path="res://CoverTester.cs" id="1_mhogp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fl58e"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="CoverTester" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.1683, 1.55079, -20.2713)
+script = ExtResource("1_mhogp")
+
+[node name="DownTester" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DownTester"]
+mesh = SubResource("BoxMesh_fl58e")
+
+[node name="MidTester" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MidTester"]
+mesh = SubResource("BoxMesh_fl58e")
+
+[node name="UpTester" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="UpTester"]
+mesh = SubResource("BoxMesh_fl58e")

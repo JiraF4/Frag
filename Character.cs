@@ -41,6 +41,11 @@ public partial class Character : RigidBody3D
 	private Node3D _leftFoot;
 	private Node3D _rightFoot;
 
+	public GodotObject GetTarget()
+	{
+		return _weaponCast.GetCollider();
+	}
+
 	public override void _Ready()
 	{
 		_body = (Node3D) FindChild("Body");
@@ -92,9 +97,9 @@ public partial class Character : RigidBody3D
 		if (standDistance < 4.0f && LinearVelocity.Y < 4.0f)
 		{
 			// body shake
-			_bodyShake += globalMoveVector.Length() * 0.1f;
+			_bodyShake += globalMoveVector.Length() * 0.2f;
 			if (globalMoveVector.Length() == 0.0f) _bodyShake = 0.0f;
-			standDistance += Mathf.Sin(_bodyShake*2.0f) * 0.15f;
+			standDistance += Mathf.Sin(_bodyShake*2.0f) * 0.25f;
 			if (standDistance < 0.0f) standDistance = 0.0f;
 			if (standDistance > 4.0f) standDistance = 4.0f;
 			
@@ -114,7 +119,7 @@ public partial class Character : RigidBody3D
 			if (Jump && _jumpTimer <= 0)
 			{
 				_jumpTimer = _jumpDelay;
-				LinearVelocity += new Vector3(0, 35.0f - LinearVelocity.Y, 0);
+				LinearVelocity += standNormal * 15.0f + new Vector3(0, 20.0f - LinearVelocity.Y, 0);
 			}
 			
 			// slide
@@ -154,9 +159,11 @@ public partial class Character : RigidBody3D
 		if (rightFootDistance > 3.5f) rightFootDistance = 3.5f;
 		
 		_leftFoot.Position = new Vector3(0.0f, -leftFootDistance, 0.0f);
-		_leftFoot.LookAt(_leftFoot.GlobalPosition + _leftFootCast.GetCollisionNormal().Rotated(Basis.X, Mathf.RadToDeg(90.0f)), _leftFootCast.GetCollisionNormal());
+		if (_leftFoot.GlobalPosition + _leftFootCast.GetCollisionNormal().Rotated(Basis.X, Mathf.RadToDeg(90.0f)) != _leftFoot.GlobalPosition)
+			_leftFoot.LookAt(_leftFoot.GlobalPosition + _leftFootCast.GetCollisionNormal().Rotated(Basis.X, Mathf.RadToDeg(90.0f)), _leftFootCast.GetCollisionNormal());
 		_rightFoot.Position = new Vector3(0.0f, -rightFootDistance, 0.0f);
-		_rightFoot.LookAt(_rightFoot.GlobalPosition + _rightFootCast.GetCollisionNormal().Rotated(Basis.X, Mathf.RadToDeg(90.0f)), _rightFootCast.GetCollisionNormal());
+		if (_rightFoot.GlobalPosition + _rightFootCast.GetCollisionNormal().Rotated(Basis.X, Mathf.RadToDeg(90.0f)) != _rightFoot.GlobalPosition)
+			_rightFoot.LookAt(_rightFoot.GlobalPosition + _rightFootCast.GetCollisionNormal().Rotated(Basis.X, Mathf.RadToDeg(90.0f)), _rightFootCast.GetCollisionNormal());
 
 		// weapon
 		var weaponPoint = _weaponCast.GetCollisionPoint();
@@ -181,7 +188,8 @@ public partial class Character : RigidBody3D
 		
 		// weapon target
 		if (!_weaponCast.IsColliding()) weaponPoint = _weaponCast.ToGlobal(_weaponCast.Position + _weaponCast.TargetPosition);
-		_weaponTarget.LookAt(weaponPoint, Camera.ToGlobal(Camera.Basis.Y) - Camera.GlobalPosition);
+		if (weaponPoint != _weaponTarget.GlobalPosition)
+			_weaponTarget.LookAt(weaponPoint, Camera.ToGlobal(Camera.Basis.Y) - Camera.GlobalPosition);
 		var targetTransform = _weaponTarget.GlobalTransform.Translated(_weaponTarget.ToGlobal(new Vector3(0, 0, (weaponDistance < 3.0f ? 3.0f - weaponDistance : 0.0f))) - _weaponTarget.GlobalPosition);
 		if (Aim)
 		{
